@@ -1,18 +1,28 @@
-import requests
+from requests import ConnectionError, get, HTTPError
 
 
 def fetch_ontology_data_by_id(id: str) -> dict:
     api = "http://www.ebi.ac.uk/ols4/api/"
     endpoint = f"ontologies/{id}"
 
-    response = requests.get(f"{api}{endpoint}")
-    json = response.json()
+    response = get(f"{api}{endpoint}")
 
-    return json
+    response.raise_for_status()
+
+    return response.json()
 
 
 def get_simple_ontology_data_by_id(id: str) -> dict:
-    data = fetch_ontology_data_by_id(id)
+    try:
+        data = fetch_ontology_data_by_id(id)
+    except HTTPError as e:
+        if e.response.status_code == 500:
+            # status code 500 used to indicate no such ontology exists
+            raise ValueError(f"No ontology found with ID '{id}'.")
+        else:
+            raise e
+    except ConnectionError:
+        raise ConnectionError("Failed to connect to the Ontology Lookup Service API.")
 
     return {
         "ID": data["ontologyId"],

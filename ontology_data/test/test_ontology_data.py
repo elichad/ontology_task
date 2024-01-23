@@ -1,3 +1,4 @@
+from requests import HTTPError
 from unittest import TestCase
 
 from ontology_data.ontology_data import (
@@ -14,7 +15,17 @@ class TestFetchOntologyDataById(TestCase):
         self.assertEqual("agro", result["ontologyId"])
         self.assertEqual("Agronomy Ontology", result["config"]["title"])
 
-    # TODO: test invalid IDs
+    def test_fetch_raises_httperror_with_invalid_id(self):
+        id = "invalid"
+
+        with self.assertRaises(HTTPError) as ctx:
+            fetch_ontology_data_by_id(id)
+
+        self.assertEqual(500, ctx.exception.response.status_code)
+
+    def test_fetch_timeout(self):
+        # TODO: mock call to force a timeout
+        pass
 
 
 class TestGetSimpleOntologyData(TestCase):
@@ -35,4 +46,14 @@ class TestGetSimpleOntologyData(TestCase):
         # Assert
         self.assertDictEqual(expected, result)
 
-    # TODO: test invalid IDs
+    def test_raises_valueerror_with_invalid_id(self):
+        id = "invalid"
+
+        with self.assertRaises(ValueError) as ctx:
+            get_simple_ontology_data_by_id(id)
+
+        self.assertEqual("No ontology found with ID 'invalid'.", str(ctx.exception))
+
+    def test_raises_exception_with_timeout(self):
+        # TODO: mock call to force a timeout
+        pass
