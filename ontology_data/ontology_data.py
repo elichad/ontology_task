@@ -11,7 +11,7 @@ def fetch_ontology_data_by_id(id: str) -> dict:
     return json
 
 
-def get_simple_ontology_data(id: str) -> dict:
+def get_simple_ontology_data_by_id(id: str) -> dict:
     data = fetch_ontology_data_by_id(id)
 
     return {
@@ -28,5 +28,5 @@ def print_data(data: dict) -> None:
         print(f"{k}: {v}")
 
 
-info = get_simple_ontology_data("agro")
+info = get_simple_ontology_data_by_id("agro")
 print_data(info)
