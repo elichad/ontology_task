@@ -1,4 +1,4 @@
-from requests import ConnectionError, get, HTTPError
+from requests import ConnectionError, get, HTTPError, Timeout
 
 
 def fetch_ontology_data_by_id(id: str) -> dict:
@@ -17,12 +17,14 @@ def get_simple_ontology_data_by_id(id: str) -> dict:
         data = fetch_ontology_data_by_id(id)
     except HTTPError as e:
         if e.response.status_code == 500:
-            # status code 500 used to indicate no such ontology exists
+            # API returns status code 500 when no ontology exists for the id
             raise ValueError(f"No ontology found with ID '{id}'.")
         else:
             raise e
     except ConnectionError:
         raise ConnectionError("Failed to connect to the Ontology Lookup Service API.")
+    except Timeout:
+        raise Timeout("Request timed out.")
 
     return {
         "ID": data["ontologyId"],

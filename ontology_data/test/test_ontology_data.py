@@ -1,5 +1,6 @@
-from requests import HTTPError
+from requests import HTTPError, ConnectionError, Timeout
 from unittest import TestCase
+from unittest.mock import patch
 
 from ontology_data.ontology_data import (
     fetch_ontology_data_by_id,
@@ -23,9 +24,21 @@ class TestFetchOntologyDataById(TestCase):
 
         self.assertEqual(500, ctx.exception.response.status_code)
 
-    def test_fetch_timeout(self):
-        # TODO: mock call to force a timeout
-        pass
+    @patch("ontology_data.ontology_data.get")
+    def test_fetch_connection_error(self, mock_requests_get):
+        id = "agro"
+        mock_requests_get.side_effect = ConnectionError
+
+        with self.assertRaises(ConnectionError):
+            fetch_ontology_data_by_id(id)
+
+    @patch("ontology_data.ontology_data.get")
+    def test_fetch_timeout(self, mock_requests_get):
+        id = "agro"
+        mock_requests_get.side_effect = Timeout
+
+        with self.assertRaises(Timeout):
+            fetch_ontology_data_by_id(id)
 
 
 class TestGetSimpleOntologyData(TestCase):
@@ -54,6 +67,24 @@ class TestGetSimpleOntologyData(TestCase):
 
         self.assertEqual("No ontology found with ID 'invalid'.", str(ctx.exception))
 
-    def test_raises_exception_with_timeout(self):
-        # TODO: mock call to force a timeout
-        pass
+    @patch("ontology_data.ontology_data.get")
+    def test_raises_exception_with_connection_error(self, mock_requests_get):
+        id = "agro"
+        mock_requests_get.side_effect = ConnectionError
+
+        with self.assertRaises(ConnectionError) as ctx:
+            get_simple_ontology_data_by_id(id)
+
+        self.assertEqual(
+            "Failed to connect to the Ontology Lookup Service API.", str(ctx.exception)
+        )
+
+    @patch("ontology_data.ontology_data.get")
+    def test_raises_exception_with_timeout(self, mock_requests_get):
+        id = "agro"
+        mock_requests_get.side_effect = Timeout
+
+        with self.assertRaises(Timeout) as ctx:
+            get_simple_ontology_data_by_id(id)
+
+        self.assertEqual("Request timed out.", str(ctx.exception))
