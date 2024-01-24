@@ -19,6 +19,14 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
+Run tests:
+
+```bash
+python -m unittest
+```
+
+## Command-line usage
+
 Run the program to fetch data about an ontology:
 
 ```bash
@@ -32,8 +40,23 @@ For example, to fetch the ontology with ID "agro":
 python main.py agro
 ```
 
-Run tests:
+## Docker container usage
+
+Build and run the container, passing the ontology ID as a command line argument in the same way as [Command-line usage](#command-line-usage):
 
 ```bash
-python -m unittest
+docker build --tag ontology_task .
+docker run ontology_task <id>
+```
+
+## Programmatic usage
+
+In a Python script (if this were distributed as a package):
+
+```python
+from ontology_data.ontology_data import get_simple_ontology_data_by_id
+
+# Get data for ontology with ID "agro"
+id = "agro"
+data = get_simple_ontology_data_by_id(id)
 ```
