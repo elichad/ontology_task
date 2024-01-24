@@ -1,6 +1,6 @@
-# uom-interview-task
+# ontology_task
 
-Exercise for University of Manchester interview
+Coding exercise to fetch data from the Ontology Lookup Service (OLS) API.
 
 ## Installation
 
@@ -9,7 +9,8 @@ This project uses Python. It has been tested with Python 3.11 on Linux (Ubuntu W
 Clone the repository:
 
 ```bash
-git clone git@github.com:elichad/uom-interview-task.git
+git clone git@github.com:elichad/ontology_task.git
+cd ontology_task
 ```
 
 Install dependencies:
