@@ -5,7 +5,6 @@ from unittest.mock import patch
 from ontology_data.ontology_data import (
     fetch_ontology_data_by_id,
     get_simple_ontology_data_by_id,
-    print_data,
 )
 
 

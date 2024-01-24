@@ -33,12 +33,3 @@ def get_simple_ontology_data_by_id(id: str) -> dict:
         "Number of terms": data["numberOfTerms"],
         "Current status": data["status"],
     }
-
-
-def print_data(data: dict) -> None:
-    for k, v in data.items():
-        print(f"{k}: {v}")
-
-
-info = get_simple_ontology_data_by_id("agro")
-print_data(info)
