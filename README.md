@@ -19,7 +19,7 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-Run tests:
+(Optional) Run tests:
 
 ```bash
 python -m unittest
@@ -27,7 +27,7 @@ python -m unittest
 
 ## Command-line usage
 
-Run the program to fetch data about an ontology:
+In the `ontology_data` directory, run the `main.py` program to fetch data about an ontology:
 
 ```bash
 cd ontology_data
@@ -42,7 +42,7 @@ python main.py agro
 
 ## Docker container usage
 
-Build and run the container, passing the ontology ID as a command line argument in the same way as [Command-line usage](#command-line-usage):
+In the root directory of the repo, build and run the container, passing the ontology ID as a command line argument in the same way as [Command-line usage](#command-line-usage):
 
 ```bash
 docker build --tag ontology_task .
